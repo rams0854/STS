@@ -6,7 +6,7 @@ require_once('models/users.php');
 $deptObj = new Dept();
 $select = $deptObj->getDept();
 
-$userName = $lastName = $mobileNumber = $emailId = $password = $filledMaleValue = $filledFemaleValue = $userNameError = $mobileNumberError = $emailError = $passwordError = $passwordMatchError = $check = $genderError = $successMessage = $deptError= "";
+$userName = $lastName = $mobileNumber = $emailId = $password = $filledMaleValue = $filledFemaleValue = $userNameError = $mobileNumberError = $emailError = $passwordError = $passwordMatchError = $check = $genderError = $successMessage = $deptError= $imgError = "";
 
 if(isset($_POST["Submit"]))
 	{
@@ -123,10 +123,10 @@ if(isset($_POST["Submit"]))
     	
     	$ram = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
     	if($ram !== false) {
-        	echo "File is an image - " . $ram["mime"] . ".";
+        	// echo "File is an image - " . $ram["mime"] . ".";
         	$check = true;
     	} else {
-        	echo "File is not an image.";
+        	$imgError = "File is not an image.";
         	$check = false;
     	}
 	
@@ -134,39 +134,35 @@ if(isset($_POST["Submit"]))
 		// Check if file already exists
 		if (file_exists($target_file)) 
 		{
-		    echo "Sorry, file already exists.";
+		    $imgError = "Sorry, file already exists.";
 		    $check = false;
 		}
 		
 		// Check file size
 		if ($_FILES["fileToUpload"]["size"] > 500000) 
 		{
-		    echo "Sorry, your file is too large.";
+		    $imgError = "Sorry, your file is too large.";
 		    $check = false;
 		}
 		
 		// Allow certain file formats
 		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) 
 		{
-		    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+		    $imgError = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
 		    $check = false;
 		}
 		
-		// Check if $check is set to 0 by an error
-		if ($check == false) 
-		{
-		    echo "Sorry, your file was not uploaded.";
-		// if everything is ok, try to upload file
-		}
+		
+		
 		else
 		{ 
 			if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) 
 			{
-        		echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+        		// echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
     		} 
     		else
     		{
-       			echo "Sorry, there was an error uploading your file.";
+       			$imgError = "Sorry, there was an error uploading your file.";
     		}
 		}
 
@@ -248,7 +244,7 @@ if(isset($_POST["Submit"]))
 
             <label>PROFILE PIC</label>
             <input type="file" name="fileToUpload" id="fileToUpload">
-           	<p></p>
+           	<p class="errorMessage"><?=$imgError?></p>
 
 			<input type="submit" name="Submit">
 
