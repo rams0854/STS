@@ -144,6 +144,8 @@ if(isset($_POST["Submit"]))
 		    $imgError = "Sorry, your file is too large.";
 		    $check = false;
 		}
+		if($check = false)
+			{$imgError = "select an image";}
 		
 		// Allow certain file formats
 		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) 
